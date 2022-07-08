@@ -1,0 +1,8 @@
+data/*
+data_models/*
+phase1_preprocessing/.ipynb_checkpoints/*
+phase2_modelisation/.ipynb_checkpoints/*
+phase3_interpretabilite/.ipynb_checkpoints/*
+phase4_fastapi/.ipynb_checkpoints/*
+phase5_streamlit/.ipynb_checkpoints/*
+fichiers_csv.ods
