@@ -1,3 +1,13 @@
+"""
+Code for FastAPI developped by Cyril Baudrillart
+
+The deployed version of the API is available a tthe following address
+https://test-cyril-fastapi.herokuapp.com/
+
+To launch local version: "uvicorn app:app --reload"
+"""
+
+
 # 1. Library imports
 import uvicorn
 from fastapi import FastAPI
@@ -47,20 +57,13 @@ def predict_creditscore(data:CreditScore):
     out_of_range('NAME_EDUCATION_TYPE_Higher_education', NAME_EDUCATION_TYPE_Higher_education,
                 msg=" field must take value 0 (No) or 1 (Yes)" )
 
-    # print(classifier.predict([[EXT_SOURCE_3, EXT_SOURCE_2,
-    #                            AMT_CREDIT, FLAG_DOCUMENT_3,
-    #                            AMT_GOODS_PRICE, CODE_GENDER,
-    #                            INSTAL_DAYS_ENTRY_PAYMENT_MAX,
-    #                            INSTAL_DAYS_ENTRY_PAYMENT_MEAN,
-    #                            DAYS_EMPLOYED,
-    #                            NAME_INCOME_TYPE_Working]]))
     prediction = classifier.predict([[EXT_SOURCE_3, EXT_SOURCE_2,
                                       PREV_DAYS_DECISION_MIN, CODE_GENDER,
                                       DAYS_EMPLOYED, PREV_APP_CREDIT_PERC_MIN,
                                       INSTAL_DPD_MAX, AMT_CREDIT,
                                       DAYS_BIRTH, FLAG_OWN_CAR,
                                       NAME_EDUCATION_TYPE_Higher_education]])
-
+    # solve bug when entering floats between 0 and 1 instead of integer 0 or 1
     if FLAG_OWN_CAR!=0 and FLAG_OWN_CAR!=1:
         return {"Error": "field must take integer value 0 (No) or 1 (Yes)"}
     elif CODE_GENDER!=0 and CODE_GENDER!=1:
@@ -80,5 +83,3 @@ def predict_creditscore(data:CreditScore):
 #    Will run on http://127.0.0.1:8000
 if __name__ == '__main__':
     uvicorn.run(app, host='127.0.0.1', port=8000)
-    
-#uvicorn app:app --reload
