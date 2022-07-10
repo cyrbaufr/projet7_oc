@@ -3,8 +3,8 @@ Version distante du dashboard utilisée en production
 
 Auteur: Cyril Baudrillart
 
-Pour exécuter le code en local:
-streamlit run credit_app_test.py
+Adresse de l'application déployée:
+https://github.com/cyrbaufr/credit_heroku
 
 Useful resources:
 https://github.com/RihabFekii/streamlit-app/blob/master/frontend/app.py
@@ -35,6 +35,9 @@ from lime import lime_tabular
 st.set_page_config(layout="wide")
 
 # ***************** Fonctions used in dashboard ****************
+
+# Change url if files are not in main folder
+url=''
 
 def page_title(my_title="Application de scoring de crédits"):
     """
@@ -104,7 +107,9 @@ def load_pickle_model():
 
 def load_pickle_shapley():
     """
-    Shap Values have been already preprocessed
+    Shap Values have been already preprocessed.
+    See Notebook 13.
+    Load Shapley values fro pickle file.
     """
     file = open("shap_values_test_set.pkl",'rb')
     shap_values = pickle.load(file)
@@ -113,6 +118,10 @@ def load_pickle_shapley():
 
 
 def load_pickle_obj():
+    """
+    Load Shap Object from pickle file for analysis
+    of Shapley values. Also preprocessed in Notebook 13.
+    """
     file = open("shap_obj.pkl",'rb')
     shap_values = pickle.load(file)
     file.close()
@@ -150,29 +159,29 @@ def get_api_response():
     return(response.text)
 
 
-# ############### LOAD DATA ###############
-
-#https://stackoverflow.com/questions/55240330/how-to-read-csv-file-from-github-using-pandas
+# trials to load big files into github
+# https://stackoverflow.com/questions/55240330/how-to-read-csv-file-from-github-using-pandas
 # url = 'https://media.githubusercontent.com/media/cyrbaufr/credit_heroku/master/'
 # full_url = url+'X_train_imputed.csv'
-url=''
 # Voir fichier app_preprocessing.ipynb
 # csv_name = 'X_train_raw.csv'
 
 def filedownload(df):
-    """ Function to download csv file created a Dataframe df
+    """ Function to download csv file from a Dataframe df
     """
     csv = df.to_csv(index=True)
     b64 = base64.b64encode(csv.encode()).decode()  # strings <-> bytes conversions
     href = f'<a href="data:file/csv;base64,{b64}" download="credit.csv">Download CSV File</a>'
     return href
 
-# ***************** MENU **********************
 
-# Create a page dropdown
+# ***************** Dashboard menu **********************
+
+# Menu available on the left of the Dashboard to select pages
 
 page = st.sidebar.selectbox("Choisissez votre page",
     ["Accueil", "Comprendre les variables", "Comprendre les scores", "Score crédit", "Comparables"])
+
 
 # ***************************** Page "Accueil" **********************************
 
@@ -299,7 +308,6 @@ if page == "Comprendre les scores":
         risque d'avoir un refus de crédit.")
 
 
-
 # ***************************** Page "Comparables" **********************************
 
 if page == "Comparables":
@@ -338,9 +346,6 @@ if page == "Comparables":
     pct_studies = nb_studies/len(X)
     st.write("Pourcentage de clients ayant fait des études supérieures: ",int(pct_studies*100), "%")
 
-    
-    # st.write("Nombre de crédits refusés: ",int(y_train_selected.sum())
-    # st.write("Soit {:.0%} des crédits".format(y_train_selected.sum()/len(y_train_selected)))
     # add charts
     # https://docs.streamlit.io/library/api-reference/charts/st.pyplot
 
@@ -443,7 +448,6 @@ if page == "Comparables":
     # # select = st.button("Valider la sélection")
     # # if select:
     # if submit_button:
-        
 
 
 # ***************************** Page "score crédit" **********************************
@@ -478,8 +482,6 @@ if page == "Score crédit":
     else:
         NAME_EDUCATION_TYPE_Higher_education=0
 
-    # 
-    # SEXE = st.sidebar.select_slider('Select sex (O=Female, 1=Male)', options=['Homme', 'Femme'])
     EXT_SOURCE_3 = st.slider("Score 'source 3' (variable EXT_SOURCE_3)",
                             0.0, 1.0, 0.5)
     EXT_SOURCE_2 = st.slider("Score 'source 2' (variable EXT_SOURCE_2)",
@@ -500,15 +502,7 @@ if page == "Score crédit":
     # text_test = st.sidebar.text_area("input EXT_source_3", EXT_SOURCE_3_input, height=10 )
 
     st.subheader("Synthèse des données du client saisies ci-dessus")
-    # if CODE_GENDER==0:
-    #     st.write('Gender: Female')
-    # else:
-    #     st.write('Gender: Male')
 
-    # st.write('EXT_SOURCE_3 from slider:', EXT_SOURCE_3)
-    # AMT_CREDIT = st.sidebar.slider('AMT_CREDIT', float(df_short['AMT_CREDIT'].min()),
-    #                                float(df_short['AMT_CREDIT'].max()),
-    #                                float(df_short['AMT_CREDIT'].mean()))
     features_names = ['EXT_SOURCE_3', 'EXT_SOURCE_2',
                     'PREV_DAYS_DECISION_MIN', 'CODE_GENDER',
                     'DAYS_EMPLOYED', 'PREV_APP_CREDIT_PERC_MIN',
