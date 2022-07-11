@@ -589,8 +589,8 @@ if page == "Score crédit":
         st.text("Les variables en rouge (partie gauche) contribuent à augmenter la probabilité de refus de crédit.")
         st.text("Les variables en bleu (partie droite) contribuent à l'acceptation du crédit")
 
-        st.subheader('Interprétabilité de chaque variable')
-        shap_obj = load_pickle_obj()
+        st.subheader('Interprétabilité locale de chaque variable')
+        shap_obj = xgboost_explainer(client_data)
         fig, ax = plt.subplots(nrows=1, ncols=1)
-        shap.waterfall_plot(shap_obj[1])
+        shap.waterfall_plot(shap_obj[0])
         st.write(fig)

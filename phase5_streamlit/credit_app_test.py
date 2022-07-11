@@ -596,7 +596,8 @@ if page == "Score crédit":
         st.text("Les variables en bleu (partie droite) contribuent à l'acceptation du crédit")
 
         st.subheader('Interprétabilité de chaque variable')
-        shap_obj = load_pickle_obj()
+        # shap_obj = load_pickle_obj()
+        shap_obj = xgboost_explainer(client_data)
         fig, ax = plt.subplots(nrows=1, ncols=1)
-        shap.waterfall_plot(shap_obj[1])
+        shap.waterfall_plot(shap_obj[0])
         st.write(fig)
