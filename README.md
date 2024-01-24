@@ -3,6 +3,10 @@
 
 Copyright Cyril Baudrillart
 
+- Mise au point d'un système de scoring de crédit automatisé grâce au Machine learning
+- Création d'un dashboard sous Streamlit
+- Mise au point d'une API utilisant FastAPI
+
 # Contenu du repository
 Ce répertoire contient l'intégralité du code réalisé dans le cadre du projet 7 de la formation Data Scientist OpenClassrooms.  
 
